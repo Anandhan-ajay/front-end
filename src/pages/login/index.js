@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // import { FetchUserData } from "../../redux/actions";
@@ -120,6 +120,12 @@ function Login() {
                 </Form.Label>
               </div>
               <Form.Control
+                style={{
+                  border: "0 none",
+                  borderBottom: "1px solid #ccc",
+                  padding: "5px 10px",
+                  backgroundColor: "transparent",
+                }}
                 type="email"
                 placeholder="Enter email"
                 name="email"
@@ -140,6 +146,12 @@ function Login() {
                 </Form.Label>
               </div>
               <Form.Control
+                style={{
+                  border: "0 none",
+                  borderBottom: "1px solid #ccc",
+                  padding: "5px 10px",
+                  backgroundColor: "transparent",
+                }}
                 type="password"
                 placeholder="Password"
                 name="password"
@@ -152,6 +164,19 @@ function Login() {
                 </p>
               )}
             </Form.Group>
+            <div>
+              <Link style={{ textDecoration: "none" }}>Forgot password?</Link>
+            </div>
+            <br />
+            <div>
+              <p>
+                You don't have an account?
+                <Link to="/register" style={{ textDecoration: "none" }}>
+                  {" "}
+                  Sign up
+                </Link>
+              </p>
+            </div>
             <div
               style={{
                 display: "flex",

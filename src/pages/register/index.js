@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Register() {
@@ -18,6 +18,7 @@ function Register() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setInputValues({
       ...inputValues,
       [name]: value,
@@ -37,10 +38,12 @@ function Register() {
         .then((res) => {
           console.log(res, "res... form submitted successfully 💚");
           alert("Register successfully...");
-          navigation("/login");
+          navigation("/");
         })
         .catch((err) => {
           console.log(err, "err...");
+
+          alert(`${err.response.data.message || err.message} ❌❌❌`);
         });
 
       console.log("ready to submit");
@@ -98,6 +101,12 @@ function Register() {
                 </Form.Label>
               </div>
               <Form.Control
+                style={{
+                  border: "0 none",
+                  borderBottom: "1px solid #ccc",
+                  padding: "5px 10px",
+                  backgroundColor: "transparent",
+                }}
                 type="text"
                 placeholder="Enter name"
                 name="name"
@@ -118,6 +127,12 @@ function Register() {
                 </Form.Label>
               </div>
               <Form.Control
+                style={{
+                  border: "0 none",
+                  borderBottom: "1px solid #ccc",
+                  padding: "5px 10px",
+                  backgroundColor: "transparent",
+                }}
                 type="email"
                 placeholder="Enter email"
                 name="email"
@@ -138,6 +153,12 @@ function Register() {
                 </Form.Label>
               </div>
               <Form.Control
+                style={{
+                  border: "0 none",
+                  borderBottom: "1px solid #ccc",
+                  padding: "5px 10px",
+                  backgroundColor: "transparent",
+                }}
                 type="text"
                 placeholder="Enter phone number"
                 name="number"
@@ -158,6 +179,12 @@ function Register() {
                 </Form.Label>
               </div>
               <Form.Control
+                style={{
+                  border: "0 none",
+                  borderBottom: "1px solid #ccc",
+                  padding: "5px 10px",
+                  backgroundColor: "transparent",
+                }}
                 type="password"
                 placeholder="Password"
                 name="password"
@@ -170,6 +197,15 @@ function Register() {
                 </p>
               )}
             </Form.Group>
+            <div>
+              <p>
+                Already have an account?
+                <Link to="/" style={{ textDecoration: "none" }}>
+                  {" "}
+                  Login
+                </Link>
+              </p>
+            </div>
 
             <div
               style={{

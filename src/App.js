@@ -11,8 +11,9 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route exact path="/" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route exact path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          {/* <Route path="/login" element={<Login />} /> */}
           <Route path="/home" element={<Home />} />
           <Route path="/updateuser" element={<UpdateUser />} />
           <Route path="/*" element={<NotFoundPage />} />
