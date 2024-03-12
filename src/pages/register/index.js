@@ -35,6 +35,7 @@ function Register() {
     } else {
       axios
         .post("http://localhost:7000/reg", { data: inputValues })
+        // .post(`http://localhost:7000/reg/${userID}`, { data: inputValues })
         .then((res) => {
           console.log(res, "res... form submitted successfully 💚");
           alert("Register successfully...");
@@ -52,7 +53,6 @@ function Register() {
 
   const formValidations = (newErrors) => {
     var newErrors = {};
-
     if (!inputValues.name.length > 0) {
       newErrors.name = "Enter name";
     }

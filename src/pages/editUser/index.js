@@ -2,24 +2,38 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import userIcon from "../../assets/images/user.png";
+import axios from "axios";
 
 function UpdateUser() {
-  const [currentData, setCurrentData] = useState({});
+  // const [currentData, setCurrentData] = useState({});
   const [updateData, setUpdateData] = useState({
     name: "",
     email: "",
     number: "",
-    password: "",
+    currentPassword: "",
+    newPassword: "",
   });
   const [checkError, setcheckError] = useState("");
+  const [userID, setUserID] = useState("");
   const navigation = useNavigate();
+  // const userID = updateData.userId;
+  // console.log("userId", userID);
+  // console.log("updateData", updateData);
 
   useEffect(() => {
     const usersData = JSON.parse(localStorage.getItem("userData"));
+    console.log(usersData, "userData +++++++");
     if (usersData) {
       console.log(usersData.data, "userData...");
-      setUpdateData(usersData.data);
-      // setCurrentData(usersData.data);
+
+      setUpdateData({
+        name: usersData.data.name,
+        email: usersData.data.email,
+        number: usersData.data.number,
+      });
+      // setUpdateData(usersData.data);
+      setUserID(usersData.data.userId);
+      console.log("userId =============== ", usersData.data.userId);
     } else {
       console.log("userData is empty");
     }
@@ -35,30 +49,77 @@ function UpdateUser() {
   };
 
   const handleSignOut = () => {
-    // navigation("/signin");
     console.log("Signing out...");
   };
 
-  const handleUser = () => {
-    formValidations();
+  const handleUser = (e) => {
+    e.preventDefault();
+    let check = formValidations();
+    if (Object.keys(check).length > 0) {
+      console.log("check with error", check);
+    } else {
+      axios
+        .post("http://localhost:7000/update", {
+          data: updateData,
+          userID: userID,
+        })
+        // .post(`http://localhost:7000/update/${userID}`, { data: updateData })
+        .then((res) => {
+          console.log(res, "response from update");
+          alert("User updated successfully");
+          navigation("/home");
+        })
+        .catch((err) => {
+          // alert(`${err?.response?.data?.message || err?.response?.message}`);
+          console.log(err, "err response from update");
+        });
+    }
   };
 
-  const formValidations = () => {
-    console.log("formValidations");
-    let newErrors = {};
-    if (!updateData.name.length > 0) {
+  console.log(updateData, "updateData ============ ");
+
+  const formValidations = (newErrors) => {
+    var newErrors = {};
+    console.log(
+      updateData.name.trim()?.length,
+      "updateData.name.length +++++++"
+    );
+    if (
+      !updateData?.name?.length === 0 ||
+      updateData?.name?.length === undefined
+    ) {
       newErrors.name = "Enter your name";
     }
-    if (!updateData.email.length > 0) {
+    if (
+      !updateData?.email?.length === 0 ||
+      updateData?.email?.length === undefined
+    ) {
       newErrors.email = "Enter your email";
     }
-    if (!updateData.number.length > 0) {
+    if (
+      !updateData?.number?.length === 0 ||
+      updateData?.number?.length === undefined
+    ) {
       newErrors.number = "Enter your number";
     }
-    if (!updateData.password.length > 0) {
-      newErrors.password = "Enter your password";
+
+    if (updateData?.newPassword) {
+      if (
+        !updateData?.currentPassword?.length === 0 ||
+        updateData?.currentPassword?.length === undefined
+      ) {
+        newErrors.currentPassword = "Enter current Password";
+      }
+      if (
+        !updateData?.newPassword?.length === 0 ||
+        updateData?.newPassword?.length === undefined
+      ) {
+        newErrors.newPassword = "Enter new password";
+      }
     }
+
     setcheckError(newErrors);
+    return newErrors;
   };
 
   return (
@@ -185,7 +246,9 @@ function UpdateUser() {
               </p>
             )}
             <Form.Group controlId="password">
-              <Form.Label style={{ fontWeight: "bold" }}>Password</Form.Label>
+              <Form.Label style={{ fontWeight: "bold" }}>
+                Current Password
+              </Form.Label>
               <Form.Control
                 style={{
                   border: "0 none",
@@ -194,16 +257,40 @@ function UpdateUser() {
                   backgroundColor: "transparent",
                 }}
                 type="text"
-                placeholder="Enter your password"
-                name="password"
-                value={updateData.password}
+                placeholder="Enter current password"
+                name="currentPassword"
+                value={updateData.currentPassword}
                 onChange={handleChange}
               />
             </Form.Group>
             <br />
-            {checkError.password && (
+            {checkError.currentPassword && (
               <p style={{ color: "red", textAlign: "left" }}>
-                {checkError.password}
+                {checkError.currentPassword}
+              </p>
+            )}
+            <Form.Group controlId="password">
+              <Form.Label style={{ fontWeight: "bold" }}>
+                New Password
+              </Form.Label>
+              <Form.Control
+                style={{
+                  border: "0 none",
+                  borderBottom: "1px solid #ccc",
+                  padding: "5px 10px",
+                  backgroundColor: "transparent",
+                }}
+                type="text"
+                placeholder="Enter new password"
+                name="newPassword"
+                value={updateData.newPassword}
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <br />
+            {checkError.newPassword && (
+              <p style={{ color: "red", textAlign: "left" }}>
+                {checkError.newPassword}
               </p>
             )}
           </Form>
